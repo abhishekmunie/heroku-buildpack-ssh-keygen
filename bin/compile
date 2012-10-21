@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+# fail fast
+set -e
+
+# parse args
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+eval $(ssh-agent)
+
+if [ ! -d "$BUILD_DIR/.ssh" ]; then
+  mkdir -p $BUILD_DIR/.ssh
+fi
+
+ssh-keygen -t rsa -q -f $BUILD_DIR/.ssh/id_rsa -N ""
+ssh-add $BUILD_DIR/.ssh/id_rsa
+ssh-add -l
